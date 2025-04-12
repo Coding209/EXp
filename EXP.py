@@ -1,6 +1,5 @@
 import streamlit as st
 
-# === Core Functions (Unchanged) ===
 def add_expense(expenses, amount, category):
     expenses.append({'amount': amount, 'category': category})
 
@@ -14,8 +13,8 @@ def total_expenses(expenses):
 def filter_expenses_by_category(expenses, category):
     return [expense for expense in expenses if expense['category'] == category]
 
-# === Streamlit App ===
-st.title("Expense Tracker")
+# Streamlit App 
+st.title("Simple Expense Tracker")
 
 # Store expenses in session state
 if 'expenses' not in st.session_state:
