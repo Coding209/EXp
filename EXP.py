@@ -1,14 +1,12 @@
 import streamlit as st
 
-# === Core Functions (Updated to include 'date') ===
-def add_expense(expenses, amount, category, date):
-    expenses.append({'amount': amount, 'category': category, 'date': str(date)})
+# === Original Core Functions (unchanged) ===
+def add_expense(expenses, amount, category):
+    expenses.append({'amount': amount, 'category': category})  # No date here
 
 def print_expenses(expenses):
     for expense in expenses:
-        st.write(
-            f'💵 Amount: ${expense["amount"]}, 🗂 Category: {expense["category"]}, 📅 Date: {expense["date"]}'
-        )
+        st.write(f'💵 Amount: ${expense["amount"]}, 🗂 Category: {expense["category"]}')
 
 def total_expenses(expenses):
     return sum(expense['amount'] for expense in expenses)
@@ -23,20 +21,21 @@ st.title("💰 Simple Expense Tracker")
 if 'expenses' not in st.session_state:
     st.session_state.expenses = []
 
-# Add expense form
+# Expense entry form
 with st.form("expense_form"):
     amount = st.number_input("Amount", min_value=0.0, format="%.2f")
     category = st.text_input("Category", value="Food")
-    date = st.date_input("Date")  # 📅 Date input
+    date = st.date_input("Date")  # ✅ Just used for display or additional context
     submitted = st.form_submit_button("Add Expense")
     if submitted:
         if category.strip():
-            add_expense(st.session_state.expenses, amount, category, date)
-            st.success("Expense added!")
+            # Use core function
+            add_expense(st.session_state.expenses, amount, category)
+            st.success(f"Expense added for {date}!")  # ✅ Mention the date in the message
         else:
             st.warning("Please enter a valid category.")
 
-# Show expenses
+# Show all expenses
 st.subheader("📋 All Expenses")
 if st.session_state.expenses:
     print_expenses(st.session_state.expenses)
@@ -55,6 +54,7 @@ if categories:
     filtered = filter_expenses_by_category(st.session_state.expenses, selected)
     st.write(f"Expenses for **{selected}**:")
     print_expenses(filtered)
+
 
 if categories:
     selected = st.selectbox("Select a category", categories)
